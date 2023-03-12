@@ -1,8 +1,17 @@
 import React from 'react'
+import TodoListItem from './TodoListItem'
 
-const TodoList = () => {
+interface ITodoList {
+    todos:TodoType[]
+}
+const TodoList:React.FC<ITodoList> = ({todos}) => { // şu tipte veri props alan react functional komponenttir dedik props alan comp da tip tanımlaması iyi olur
   return (
-    <div>TodoList</div>
+    <ul>
+        { todos.map((item) => (
+        <TodoListItem item={item} key={item.id}/>
+        ))}
+        
+    </ul>
   )
 }
 
