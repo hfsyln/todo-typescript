@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
+// import useAxios from '../hooks/useAxios';
 import InputForm from '../components/InputForm'
 import TodoList from '../components/TodoList'
 
@@ -8,7 +9,12 @@ const url =`https://640e0e8d1a18a5db83875121.mockapi.io/todos`
 
 const Home = () => {
  
+      //custom hooktan da çekip burada çağırıp ve componentlere props olarak geçebiliriz. Bunları ilgili componentlerde de çağırabilirdik. Ama propslar typescriptte nasıl kullanılıyor onu görmek adına bu şekilde kullanabiliriz
+
+   // const { todos, getTodos, addTodo, deleteTodo, toggleTodo } = useAxios()
+
     const[todos, setTodos] = useState<TodoType[]>([])   //todos tipi ..... yı içeren array olacak dedik
+   
     const getTodos = async () => {
         try{
             const {data} = await axios.get<TodoType[]>(url)   // gelen datanın tipi ... yı içeren array olacak
@@ -27,13 +33,13 @@ const Home = () => {
                 await axios.post(url, newTodo)
                 getTodos() //ekleme yaptık ama görebilmek için çağırmamız lazım
             } catch (error) {
-                
+                console.log(error)
             }
     } //oluşturduğumuz yeni newTodo yu API ye gönderdik
  
 const toggleTodo:ToggleFn = async (item) => {
     try {
-        await axios.put(`${url}\${id}`, {...item, isDone:!item.isDone}) //itemlkerden tıklananın id sine göre itema ulaş o itemin isdone ını değiştir
+        await axios.put(`${url}/${item.id}`, {...item, isDone:!item.isDone}) //itemlkerden tıklananın id sine göre itema ulaş o itemin isdone ını değiştir
         getTodos(); // değişiklikler ile tekrar çağır
     } catch (error) {
         console.log(error)
@@ -42,7 +48,7 @@ const toggleTodo:ToggleFn = async (item) => {
 
 const deleteTodo:DeleteFn = async (id) => {
     try {
-        await axios.delete(`${url}\${id}`)
+        await axios.delete(`${url}/${id}`)
         getTodos()
     } catch (error) {
         console.log(error)
